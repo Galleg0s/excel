@@ -1,8 +1,8 @@
-import "./styles/index.scss";
-import "./index.js";
+
+import './styles/index.scss';
 
 async function start() {
-	return await Promise.resolve("Async is working");
+  return Promise.resolve('Async is working');
 }
 
-start().then(result => console.log(result));
+start().then((result) => result.toLowerCase()).catch((e) => console.log(e));

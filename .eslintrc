@@ -1,0 +1,41 @@
+{
+	"parser": "babel-eslint",
+	"parserOptions": {
+		"sourceType": "module"
+	},
+	"env": { "es6": true, "browser": true, "node": true },
+	"extends": [
+		"airbnb",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"plugin:sonarjs/recommended",
+		"plugin:promise/recommended"
+	],
+	"plugins": ["sonarjs", "no-use-extend-native", "promise"],
+	"rules": {
+		"import/no-extraneous-dependencies": [
+			"error",
+			{
+				"packageDir": "./"
+			}
+		],
+		"allowTernary": 0,
+		"sonarjs/cognitive-complexity": ["error", 30],
+		"no-use-extend-native/no-use-extend-native": 2
+	},
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"paths": [
+					"src"
+				],
+				"extensions": [
+					".js",
+					".jsx",
+					".ts",
+					".tsx"
+				]
+			}
+		}
+	}
+}

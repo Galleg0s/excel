@@ -1,25 +1,27 @@
 const path = require("path");
-
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
+const isProd = process.env.NODE_ENV === "production";
+const isDev = process.env.NODE_ENV === "development";
+
+const getFileName = ext => (isProd ? `bundle.[hash].${ext}` : `bundle.${ext}`);
+
 module.exports = {
 	devServer: {
-		contentBase: path.join(__dirname, "dist"),
-		compress: true,
 		hot: true,
-		port: 9000,
+		port: 3000,
 	},
+	devtool: isDev ? "eval-source-map" : null,
 	mode: "development",
-	entry: "./index.js",
+	entry: ["@babel/polyfill", "./index.js"],
 	output: {
 		path: path.resolve(__dirname, "dist"),
-		filename: "bundle.[hash].js",
+		filename: getFileName("js"),
 	},
-
 	context: path.resolve(__dirname, "src"),
 	module: {
 		rules: [
@@ -35,18 +37,25 @@ module.exports = {
 			},
 			{
 				test: /\.s[ac]ss$/i,
-				use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+				use: [
+					{ loader: MiniCssExtractPlugin.loader, options: { hmr: isDev, reloadAll: true } },
+					"css-loader",
+					"sass-loader",
+				],
 			},
 		],
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
-		new HtmlWebpackPlugin({ template: "index.html" }),
+		new HtmlWebpackPlugin({
+			template: "index.html",
+			minify: { removeComments: isProd, collapseWhitespace: isProd },
+		}),
 		new CopyPlugin({
 			patterns: [{ from: path.resolve(__dirname, "src/favicon.ico"), to: path.resolve(__dirname, "dist") }],
 		}),
 		new MiniCssExtractPlugin({
-			filename: "bundle.[hash].css",
+			filename: getFileName("css"),
 		}),
 	],
 	resolve: {

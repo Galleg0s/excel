@@ -15,6 +15,7 @@ const getJSLoaders = () => {
       loader: 'babel-loader',
       options: {
         presets: ['@babel/preset-env'],
+        plugins: ['@babel/plugin-proposal-class-properties'],
       },
     },
   ];
@@ -29,7 +30,7 @@ const getJSLoaders = () => {
 module.exports = {
   devServer: {
     hot: true,
-    port: 3000,
+    port: 9000,
   },
   devtool: isDev ? 'eval-source-map' : null,
   mode: 'development',
@@ -73,7 +74,8 @@ module.exports = {
     extensions: ['.js'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@core': path.resolve(__dirname, 'src'),
+      '@core': path.resolve(__dirname, 'src/core'),
+      '@components': path.resolve(__dirname, 'src/components/'),
     },
   },
   optimization: {
